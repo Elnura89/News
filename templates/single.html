@@ -1,0 +1,84 @@
+{% extends 'home.html' %}
+{% load static %}
+
+
+{% block content %}
+
+				<!-- Main -->
+					<div id="main">
+
+						<!-- Post -->
+							<article class="post">
+								<header>
+									<div class="title">
+										<h2><a href="#">{{row.title}}</a></h2>
+										<p>{{row.description}}</p>
+									</div>
+									<div class="meta">
+										<time class="published" datetime="2015-11-01">{{row.created_at}}</time>
+										<a href="#" class="author"><span class="name">{{row.author.username}}</span><img src="images/avatar.jpg" alt="" /></a>
+									</div>
+								</header>
+								<span class="image featured"><img src="{{row.main_image.url}}" alt="" /></span>
+								<p>{{row.text}}</p>
+								
+								<div id="carouselExampleInterval" class="carousel slide" data-bs-ride="carousel">
+									<div class="carousel-inner">
+										{% for image in images%}
+									  <div class="carousel-item {% if image == images.0 %}active{% endif %}" data-bs-interval="10000">
+										<img style='height: 500px;' src="{{image.image.url}}" class="d-block w-100" alt="...">
+									  </div>
+									  {% endfor %}
+									</div>
+									<button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="prev">
+									  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+									  <span class="visually-hidden">Previous</span>
+									</button>
+									<button class="carousel-control-next" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="next">
+									  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+									  <span class="visually-hidden">Next</span>
+									</button>
+								  </div>
+
+								<footer>
+									<ul class="stats">
+										<li><a href="#">Количество просмотров - {{row.counter}}</a></li>
+										<li><a href="/like/?id={{row.id}}" class="icon solid fa-heart">{{row.like_count}}</a></li>
+										<!-- <li><a href="#" class="icon solid fa-comment">128</a></li> -->
+									</ul>
+								</footer>
+							</article>
+
+							{% for newsDetatil in rows %}
+							<article class="post">
+								<header>
+									<div class="title">
+										<h2><a href="#">{{newsDetatil.title}}</a></h2>								
+									</div>
+								</header>
+								<p>{{newsDetatil.text}}</p>
+							</article>
+							{% endfor %}
+
+							<article class = 'post'>
+								<h1>Комментарии</h1>
+								<br>
+								<form action="{% url 'comments' row.id %}" method="post">
+									{% csrf_token %}
+									<label>Name:</label>
+									<input type="text" name="name" />
+									<label>Text:</label>
+									<input type="text" name="text" />
+									<input type="submit" value="Save" />
+								</form>
+								<br>
+								<br>
+							{% for comment in comments %}
+								<h4>{{comment.name}}: {{comment.text}}</h4>
+								<br>
+							{% endfor %}
+							</article>
+
+					</div>
+
+{% endblock %}	
